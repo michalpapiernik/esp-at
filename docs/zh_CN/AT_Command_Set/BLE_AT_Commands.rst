@@ -74,7 +74,7 @@ Bluetooth® Low Energy AT 命令集
 
 .. only:: esp32c2 or esp32c3 or esp32c6
 
-  当前， {IDF_TARGET_NAME} AT 固件支持 `蓝牙核心规范 5.0 版本 <https://www.bluetooth.com/specifications/specs/core-specification-5/>`_。
+  当前， {IDF_TARGET_NAME} AT 固件支持 `蓝牙核心规范 5.0 版本 <https://www.bluetooth.com/specifications/specs/core-specification-5-0/>`_。
 
 .. only:: esp32 or esp32c3 or esp32c6
 
@@ -162,7 +162,7 @@ Bluetooth® Low Energy AT 命令集
     说明
     ^^^^
 
-    -  使用 Bluetooth LE 功能时，如果您无需使用 SoftAP 模式，则建议您可以通过 :ref:`AT+CWMODE <cmd-MODE>` 设置 Wi-Fi 模式为 Null 或 Station 模式。
+    -  为获得更好的性能，建议在使用 Bluetooth LE 功能前，先发送 :ref:`AT+CWMODE=0/1 <cmd-MODE>` 命令禁用 SoftAP。如您想了解更多细节，请阅读 `RF 共存 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-guides/coexist.html>`_ 文档。
     -  使用其它 Bluetooth LE 命令之前，请先调用本命令，初始化 Bluetooth LE 角色。
     -  Bluetooth LE 角色初始化后，不能直接切换。如需切换角色，需要先调用 :ref:`AT+RST <cmd-RST>` 命令重启系统，再重新初始化 Bluetooth LE 角色。
     -  建议在注销 Bluetooth LE 之前，停止正在进行的广播、扫描并断开所有的连接。
@@ -479,7 +479,7 @@ Bluetooth® Low Energy AT 命令集
     ^^^^
 
     -  响应中的 ``OK`` 和 ``+BLESCAN:<addr>,<rssi>,<adv_data>,<scan_rsp_data>,<addr_type>`` 在输出顺序上没有严格意义上的先后顺序。``OK`` 可能在 ``+BLESCAN:<addr>,<rssi>,<adv_data>,<scan_rsp_data>,<addr_type>`` 之前输出，也有可能在 ``+BLESCAN:<addr>,<rssi>,<adv_data>,<scan_rsp_data>,<addr_type>`` 之后输出。 
-    -  如果您想要获得扫描响应数据，需要使用 :ref:`AT+BLESCANPARAM <cmd-BSCANP>` 指令设置扫描方式为 ``active scan (AT+BLESCANPARAM=1,0,0,100,50)``，并且对端设备需要设置 ``scan rsp data``，才能获得扫描响应数据。
+    -  如果您想要获得扫描响应数据，需要使用 :ref:`AT+BLESCANPARAM <cmd-BSCANP>` 命令设置扫描方式为 ``active scan (AT+BLESCANPARAM=1,0,0,100,50)``，并且对端设备需要设置 ``scan rsp data``，才能获得扫描响应数据。
 
     示例
     ^^^^
@@ -615,7 +615,7 @@ Bluetooth® Low Energy AT 命令集
         -  5: ADV_TYPE_EXT_NOSCANNABLE_IND
         -  6: ADV_TYPE_EXT_CONNECTABLE_IND
         -  7: ADV_TYPE_EXT_SCANNABLE_IND
-            -  当设置广播类型为 0-4，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播参数最多只能设置 31 字节，如果需要设置更长的广播参数，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 指令来设置。
+            -  当设置广播类型为 0-4，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播参数最多只能设置 31 字节，如果需要设置更长的广播参数，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 命令来设置。
             -  当设置广播类型为 5-7，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播参数最多只能设置 119 字节。
 
     -  **<own_addr_type>**：Bluetooth LE 地址类型
@@ -753,12 +753,12 @@ Bluetooth® Low Energy AT 命令集
 
     .. only:: esp32
 
-        -  如果需要设置更长的广播数据，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 指令来设置。
+        -  如果需要设置更长的广播数据，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 命令来设置。
 
     .. only:: esp32c3 or esp32c6 or esp32c2
 
         -  在使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令之前，必须先通过 :ref:`AT+BLEADVPARAM <cmd-BADVP>` 命令设置广播参数。
-        -  当调用 :ref:`AT+BLEADVPARAM <cmd-BADVP>` 命令设置广播类型为 0-4，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播数据最多只能设置 31 字节，如果需要设置更长的广播数据，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 指令来设置。
+        -  当调用 :ref:`AT+BLEADVPARAM <cmd-BADVP>` 命令设置广播类型为 0-4，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播数据最多只能设置 31 字节，如果需要设置更长的广播数据，请调用 :ref:`AT+BLESCANRSPDATA <cmd-BSCANR>` 命令来设置。
         -  当调用 :ref:`AT+BLEADVPARAM <cmd-BADVP>` 命令设置广播类型为 5-7，则使用 :ref:`AT+BLEADVDATA <cmd-BADVD>` 命令设置广播数据最多只能设置 119 字节。
 
     示例
@@ -2977,12 +2977,12 @@ Bluetooth® Low Energy AT 命令集
    -  6: WPA3_PSK；
    -  7: WPA2_WPA3_PSK。
 
-.. only:: esp32 or esp3c3
+说明
+^^^^
 
-    说明
-    ^^^^
-
-    - 您只能在 Bluetooth LE 未初始化情况下开启或关闭 BluFi (:ref:`AT+BLEINIT=0 <cmd-BINIT>`)。
+- 您只能在 Bluetooth LE 未初始化情况下开启或关闭 BluFi (:ref:`AT+BLEINIT=0 <cmd-BINIT>`)。
+- 为获得更好的性能，建议在使用 BluFi 功能前，先发送 :ref:`AT+CWMODE=0/1 <cmd-MODE>` 命令禁用 SoftAP。如您想了解更多细节，请阅读 `RF 共存 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-guides/coexist.html>`_ 文档。
+- BluFi 配网后请发送 :ref:`AT+BLUFI=0 <cmd-BLUFI>` 命令关闭 BluFi，以释放资源。
 
 示例
 ^^^^

@@ -20,7 +20,7 @@ HTTP AT Commands
 Introduction
 ------------
 
-.. only:: esp32 or esp32c3 or esp32c6
+.. only:: esp32 or esp32c3 or esp32c6 or esp32s2
 
   .. important::
     The default AT firmware supports all the AT commands mentioned on this page. If you don't need {IDF_TARGET_NAME} to support HTTP commands, you can compile the ESP-AT project by following the steps in :doc:`Compile ESP-AT Project Locally <../Compile_and_Develop/How_to_clone_project_and_compile_it>` documentation. In the project configuration during the fifth step, make the following selections:
@@ -399,6 +399,8 @@ Note
 - The HTTP request headers configured by this command are global. Once set, all HTTP commands will carry these request headers.
 - If the ``key`` in the HTTP request header set by this command is the same as that of other HTTP commands, the HTTP request header set by this command will be used.
 
+.. _cmd-HTTPCHEAD_example:
+
 Example
 ^^^^^^^
 
@@ -486,5 +488,5 @@ Example
 
 -  HTTP AT:
    
-   - The error code of command ``AT+HTTPCLIENT`` will be ``0x7000+Standard HTTP Error Code`` (For more details about Standard HTTP/1.1 Error Code, see `RFC 2616 <https://tools.ietf.org/html/rfc2616>`_).
+   - The error code of command ``AT+HTTPCLIENT`` will be ``0x7000+Standard HTTP Error Code`` (For more details about Standard HTTP/1.1 Error Code, see `RFC 2616 <https://datatracker.ietf.org/doc/html/rfc2616>`_).
    - For example, if AT gets the HTTP error 404 when calling command ``AT+HTTPCLIENT``, it will respond with error code of ``0x7194`` (``hex(0x7000+404)=0x7194``).

@@ -20,7 +20,7 @@ HTTP AT 命令集
 介绍
 ------
 
-.. only:: esp32 or esp32c3 or esp32c6
+.. only:: esp32 or esp32c3 or esp32c6 or esp32s2
 
   .. important::
     默认的 AT 固件支持此页面下的所有 AT 命令。如果您不需要 {IDF_TARGET_NAME} 支持 HTTP 命令，请自行 :doc:`编译 ESP-AT 工程 <../Compile_and_Develop/How_to_clone_project_and_compile_it>`，在第五步配置工程里选择：
@@ -90,7 +90,7 @@ HTTP AT 命令集
 -  如果包含 URL 的整条命令的长度超过了 256 字节，请先使用 :ref:`AT+HTTPURLCFG <cmd-HTTPURLCFG>` 命令预配置 URL，然后本命令里的 ``<"url">`` 参数需要设置为 ``""``。
 -  如果 ``url`` 参数不为空，HTTP 客户端将使用它并忽略 ``host`` 参数和 ``path`` 参数；如果 ``url`` 参数被省略或字符串为空，HTTP 客户端将使用 ``host`` 参数和 ``path`` 参数。
 -  某些已发布的固件默认不支持 HTTP 客户端命令（详情请见 :doc:`../Compile_and_Develop/esp-at_firmware_differences`），但是可通过以下方式使其支持该命令：``./build.py menuconfig`` > ``Component config`` > ``AT`` > ``AT http command support``，然后编译项目（详情请见 :doc:`../Compile_and_Develop/How_to_clone_project_and_compile_it`）。
--  该指令不支持 URL 重定向，在获取到服务器返回的状态码 301（永久性重定向）或者 302（临时性重定向）后不会自动跳转到新的 URL 地址。您可以使用某些工具获取要访问的实际 URL，然后通过该命令访问它。
+-  该命令不支持 URL 重定向，在获取到服务器返回的状态码 301（永久性重定向）或者 302（临时性重定向）后不会自动跳转到新的 URL 地址。您可以使用某些工具获取要访问的实际 URL，然后通过该命令访问它。
 -  如果包含 ``<"data">`` 参数的整条命令的长度超过了 256 字节，请使用 :ref:`AT+HTTPCPOST <cmd-HTTPCPOST>` 命令。
 -  要设置更多的 HTTP 请求头，请使用 :ref:`AT+HTTPCHEAD <cmd-HTTPCHEAD>` 命令。
 
@@ -399,6 +399,8 @@ HTTP AT 命令集
 - 本命令配置的 HTTP 请求头是全局性的，一旦设置，所有 HTTP 的命令都会携带这些请求头。
 - 本命令设置的 HTTP 请求头中的 ``key`` 如果和其它 HTTP 命令的请求头中的 ``key`` 相同，则会使用本命令中设置的 HTTP 请求头。
 
+.. _cmd-HTTPCHEAD_example:
+
 示例
 ^^^^
 
@@ -486,5 +488,5 @@ HTTP AT 命令集
 
 -  HTTP AT：
    
-   - ``AT+HTTPCLIENT`` 命令的错误码为 ``0x7000+Standard HTTP Error Code`` （更多有关 Standard HTTP/1.1 Error Code 的信息，请参考 `RFC 2616 <https://tools.ietf.org/html/rfc2616>`_）。
+   - ``AT+HTTPCLIENT`` 命令的错误码为 ``0x7000+Standard HTTP Error Code`` （更多有关 Standard HTTP/1.1 Error Code 的信息，请参考 `RFC 2616 <https://datatracker.ietf.org/doc/html/rfc2616>`_）。
    - 例如，若 AT 在调用 ``AT+HTTPCLIENT`` 命令时收到 HTTP error 404，则会返回 ``0x7194`` 错误码 (``hex(0x7000+404)=0x7194``)。

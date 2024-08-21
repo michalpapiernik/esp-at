@@ -2,7 +2,7 @@
 AT 命令集
 **************
 
-{IDF_TARGET_VER: default="undefined", esp32="5.0", esp32c2="5.0", esp32c3="5.0", esp32c6="5.1"}
+{IDF_TARGET_VER: default="undefined", esp32="5.0", esp32c2="5.0", esp32c3="5.0", esp32c6="5.1", esp32s2="5.0"}
 
 :link_to_translation:`en:[English]`
 
@@ -14,7 +14,7 @@ AT 命令集
    基础 AT 命令集 <Basic_AT_Commands>
    Wi-Fi AT 命令集 <Wi-Fi_AT_Commands>
    TCP-IP AT 命令集 <TCP-IP_AT_Commands>
-   Bluetooth® Low Energy 命令集 <BLE_AT_Commands>
+   :esp32 or esp32c2 or esp32c3 or esp32c6: Bluetooth® Low Energy 命令集 <BLE_AT_Commands>
    :esp32: Bluetooth® AT 命令集 <BT_AT_Commands>
    MQTT AT 命令集 <MQTT_AT_Commands>
    HTTP AT 命令集 <HTTP_AT_Commands>
@@ -78,7 +78,7 @@ AT 命令分类
 
       AT+CWSAP="ESP756290","21030826",1,4
 
--  特殊字符需作转义处理，如 ``,``、``"``、``\`` 等。
+-  特殊字符需作转义处理，当前需要转义的字符有 ``,``、``"``、``\``。
 
    -  ``\\``：转义反斜杠。
    -  ``\,``：转义逗号，分隔参数的逗号无需转义。

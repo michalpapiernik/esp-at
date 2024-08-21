@@ -25,7 +25,7 @@ This section describes the differences among AT firmwares of {IDF_TARGET_NAME} s
 
   - ESP32C2-2MB-AT-Vx.x.x.x.zip (referred to as **ESP32C2-2MB Bin** in this section);
   - ESP32C2-4MB-AT-Vx.x.x.x.zip (referred to as **ESP32C2-4MB Bin** in this section);
-  - ESP32C2-BLE-2MB Bin (firmware is not released, but you can download the ``esp32c2-ble-2mb-at`` firmware from :doc:`GitHub Actions <How_to_download_the_latest_temporary_version_of_AT_from_github>`, or `Compile ESP-AT Project Locally <How_to_clone_project_and_compile_it>` by yourself);
+  - ESP32C2-BLE-2MB Bin (firmware is not released, but you can download the ``esp32c2-ble-2mb-at`` firmware from :doc:`GitHub Actions <How_to_download_the_latest_temporary_version_of_AT_from_github>`, or :doc:`Compile ESP-AT Project Locally <How_to_clone_project_and_compile_it>` by yourself);
 
 .. only:: esp32c3
 
@@ -34,6 +34,10 @@ This section describes the differences among AT firmwares of {IDF_TARGET_NAME} s
 .. only:: esp32c6
 
   - ESP32C6-4MB-AT-Vx.x.x.x.zip (referred to as **ESP32C6-4MB Bin** in this section);
+
+.. only:: esp32s2
+
+  - ESP32-S2-MINI-AT-Vx.x.x.x.zip (referred to as **MINI Bin** in this section);
 
 Supported Command Set
 ^^^^^^^^^^^^^^^^^^^^^
@@ -379,6 +383,46 @@ The table lists which command set is supported by default in the official AT fir
     * - OTA
       - |icon-green-check|
 
+.. only:: esp32s2
+
+  .. list-table::
+    :header-rows: 1
+
+    * - Command Set
+      - MINI Bin
+    * - base
+      - |icon-green-check|
+    * - user
+      - |icon-green-check|
+    * - Wi-Fi
+      - |icon-green-check|
+    * - TCP-IP
+      - |icon-green-check|
+    * - mDNS
+      - |icon-green-check|
+    * - WPS
+      - |icon-green-check|
+    * - SmartConfig
+      - |icon-green-check|
+    * - ping
+      - |icon-green-check|
+    * - MQTT
+      - |icon-green-check|
+    * - HTTP
+      - |icon-green-check|
+    * - FileSystem
+      - |icon-orange-check|
+    * - driver
+      - |icon-orange-check|
+    * - WPA2 enterprise
+      - |icon-orange-check|
+    * - Web server
+      - |icon-orange-check|
+    * - WebSocket
+      - |icon-orange-check|
+    * - OTA
+      - |icon-green-check|
+
 Hardware Differences
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -498,6 +542,23 @@ Hardware Differences
         | RX: 6
         | CTS: 5
         | RTS: 4
+
+.. only:: esp32s2
+
+  .. list-table::
+    :header-rows: 1
+
+    * - Hardware
+      - MINI Bin
+    * - Flash
+      - 4 MB
+    * - PSRAM
+      - |icon-red-cross|
+    * - UART Pins [#one]_
+      - | TX: 17
+        | RX: 21
+        | CTS: 20
+        | RTS: 19
 
 .. [#one] UART pins can be customized. See :doc:`How_to_set_AT_port_pin` for details.
 
@@ -726,4 +787,16 @@ The table below lists the modules or chips that are default supported by the off
     * - ESP32-C6-MINI-1
       - |icon-green-check|
     * - ESP32-C6-WROOM-01
+      - |icon-green-check|
+
+.. only:: esp32s2
+
+  .. list-table::
+    :header-rows: 1
+
+    * - Module/Chip
+      - MINI Bin
+    * - ESP32-S2-MINI-2/2U
+      - |icon-green-check|
+    * - ESP32-S2-SOLO-2/2U
       - |icon-green-check|

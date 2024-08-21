@@ -43,6 +43,7 @@ TCP/IP AT Commands
 -  :ref:`AT+CIPRECVLEN <cmd-CIPRECVLEN>`: Obtain socket data length in passive receiving mode.
 -  :ref:`AT+PING <cmd-CIPPING>`: Ping the remote host.
 -  :ref:`AT+CIPDNS <cmd-DNS>`: Query/Set DNS server information.
+-  :ref:`AT+MDNS <cmd-MDNS>`: Configure the mDNS function.
 -  :ref:`AT+CIPTCPOPT <cmd-TCPOPT>`: Query/Set the socket options.
 
 .. _cmd-tcpip-intro:
@@ -55,6 +56,7 @@ Introduction
 
   - Disable OTA commands (:ref:`AT+CIUPDATE <cmd-UPDATE>` and :ref:`AT+CIPFWVER <cmd-FWVER>`): ``Component config`` -> ``AT`` -> ``AT OTA command support``
   - Disable PING commands (:ref:`AT+PING <cmd-CIPPING>`): ``Component config`` -> ``AT`` -> ``AT ping command support``
+  - Disable mDNS commands (:ref:`AT+MDNS <cmd-MDNS>`): ``Component config`` -> ``AT`` -> ``AT MDNS command support``
   - Disable TCP/IP commands (Not recommended. Once disabled, all TCP/IP functions will be unavailable and you will need to implement these AT commands yourself): ``Component config`` -> ``AT`` -> ``AT net command support``
 
 .. _cmd-IPV6:
@@ -1390,7 +1392,7 @@ Note
 -  The asctime style time is defined at `asctime man page <https://linux.die.net/man/3/asctime>`_.
 -  When {IDF_TARGET_NAME} enters Light-sleep or Deep-sleep mode and then wakes up, the system time may become inaccurate. It is recommended to resend the :ref:`AT+CIPSNTPCFG <cmd-SNTPCFG>` command to obtain the new time from the NTP server.
 
-.. only:: esp32 or esp32c3 or esp32c6
+.. only:: esp32 or esp32c3 or esp32c6 or esp32s2
 
   - The time obtained from SNTP is stored in the RTC area, so it will not be lost after a software reset (chip does not lose power).
 
@@ -2218,6 +2220,13 @@ Parameters
 -  **<"remote IP">**: string parameter showing the remote IPv4 address or IPv6 address, enabled by the command :ref:`AT+CIPDINFO=1 <cmd-IPDINFO>`.
 -  **<remote port>**: the remote port number, enabled by the command :ref:`AT+CIPDINFO=1 <cmd-IPDINFO>`.
 
+Note
+^^^^^
+
+- The command needs to be executed in passive receive mode. Otherwise, ERROR is returned. You can verify whether AT is in passive receive mode by using the :ref:`AT+CIPRECVTYPE <cmd-CIPRECVTYPE>` command.
+- When this command is executed without any data available to read, it will directly return ERROR. You can verify if there is readable data at that time by using the :ref:`AT+CIPRECVLEN? <cmd-CIPRECVLEN>` command.
+- When executing the command ``AT+CIPRECVDATA=<len>``, at least ``<len> + 128`` bytes of memory are required. You can use the command :ref:`AT+SYSRAM? <Basic-AT>` to check the current available memory. When insufficient memory leads to a memory allocation failure, this command will also return ERROR. You can review the :doc:`AT log output </Get_Started/Hardware_connection>` for ``alloc fail`` or similar print messages to confirm whether a memory allocation failure has occurred.
+
 Example
 ^^^^^^^^
 
@@ -2418,6 +2427,57 @@ Example
     // second DNS Server based on IPv6: google-public-dns-a.google.com
     // third DNS Server based on IPv6: main DNS Server based on IPv6 in JiangSu Province, China
     AT+CIPDNS=1,"240c::6666","2001:4860:4860::8888","240e:5a::6666"
+
+.. _cmd-MDNS:
+
+:ref:`AT+MDNS <WiFi-AT>`: Configure the mDNS Function
+------------------------------------------------------------
+
+Set Command
+^^^^^^^^^^^
+
+**Command:**
+
+::
+
+    AT+MDNS=<enable>[,<"hostname">,<"service_type">,<port>][,<"instance">][,<"proto">][,<txt_number>][,<"key">,<"value">][...]
+
+**Response:**
+
+::
+
+    OK
+
+Parameters
+^^^^^^^^^^
+
+-  **<enable>**:
+
+   -  1: Enable the mDNS function. The following parameters need to be set.
+   -  0: Disable the mDNS function. Please do not set the following parameters.
+
+- **<"hostname">**: mDNS host name.
+- **<"service_type">**: mDNS service type.
+- **<port>**: mDNS service port.
+- **<"instance">**: mDNS instance name. Default: ``<"hostname">``.
+- **<"proto">**: mDNS service protocol. Recommended values: ``_tcp`` or ``_udp``. Default: ``_tcp``.
+- **<txt_number>**: the number of key-value pairs in the TXT record. Range: [1,10].
+- **<"key">**: key of the TXT record.
+- **<"value">**: value of the TXT record.
+- **[...]**: repeat the key-value pairs of TXT record according to the ``<txt_number>``.
+
+Example
+^^^^^^^^
+
+::
+
+    // Enable mDNS function. Set the hostname to "espressif", service type to "_iot", and port to 8080.
+    AT+MDNS=1,"espressif","_iot",8080  
+
+    // Disable mDNS function
+    AT+MDNS=0
+
+Detailed examples can be found in: :ref:`mDNS Example <example-mdns>`.
 
 .. _cmd-TCPOPT:
 

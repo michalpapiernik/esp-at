@@ -30,7 +30,7 @@ What You Need
    * - Jumper wires (serial port converter to {IDF_TARGET_NAME} board)
      - AT command/response connection.
 
-.. figure:: ../../_static/hw-connection-what-you-need.png
+.. figure:: ../../_static/get_started/hw_connection/hw-connection-what-you-need.png
    :align: center
    :alt: Connection of Components for ESP-AT Testing
    :figclass: align-center
@@ -49,7 +49,7 @@ Note:
 
 - In the above picture, four jump wires are used to connect the {IDF_TARGET_NAME} board and USB to serial converter. If you do not use hardware flow control, two wires connecting TX/RX and a simpler converter will be enough.
 
-.. only:: esp32 or esp32c6
+.. only:: esp32 or esp32c6 or esp32s2
 
   - If you use an {IDF_TARGET_NAME} module instead of a development board and flash firmware via UART, you need to reserve the UART pins (refer to {IDF_TARGET_DATASHEET_EN_URL} > Section Pin Description for more details) and strapping pins (refer to {IDF_TARGET_DATASHEET_EN_URL} > Section Strapping Pins for more details), and enter the download mode by controlling the strapping pin level.
 
@@ -110,7 +110,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-wroom-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-wroom-hw-connection.png
     :align: center
     :alt: ESP32-WROOM-32 Series Hardware Connection
     :figclass: align-center
@@ -151,7 +151,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-mini-hw-connection.jpg
+  .. figure:: ../../_static/get_started/hw_connection/esp32-mini-hw-connection.jpg
     :align: center
     :alt: ESP32-MINI-1 Series Hardware Connection
     :figclass: align-center
@@ -191,7 +191,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-wrover-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-wrover-hw-connection.png
     :align: center
     :alt: ESP32-WROVER Series Hardware Connection
     :figclass: align-center
@@ -232,14 +232,14 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-pico-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-pico-hw-connection.png
     :align: center
     :alt: ESP32-PICO Series Hardware Connection
     :figclass: align-center
 
     ESP32-PICO Series Hardware Connection
 
-  If you want to connect your device directly with ESP32-PICO-D4 rather than the {IDF_TARGET_NAME} board that integrates it, please refer to `ESP32-PICO-D4 Datasheet <https://www.espressif.com/sites/default/files/documentation/esp32-pico-d4_datasheet_en.pdf>`_ for more details.
+  If you want to connect your device directly with ESP32-PICO-D4 rather than the {IDF_TARGET_NAME} board that integrates it, please refer to `ESP32-PICO-D4 Datasheet <https://www.espressif.com/sites/default/files/documentation/esp32-pico_series_datasheet_en.pdf>`_ for more details.
 
   ESP32-SOLO Series
   ^^^^^^^^^^^^^^^^^^
@@ -273,7 +273,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-solo-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-solo-hw-connection.png
     :align: center
     :alt: ESP32-SOLO Series Hardware Connection
     :figclass: align-center
@@ -289,7 +289,7 @@ Note:
 
   {IDF_TARGET_CFG_PREFIX}-4MB series refer to the module or board that has a built-in {IDF_TARGET_NAME}/ESP8684 chip with a 4 MB flash, such as {IDF_TARGET_NAME} MINI series device and {IDF_TARGET_NAME} WROOM series device.
 
-  {IDF_TARGET_CFG_PREFIX}-4MB AT uses two UART ports: UART0 is used to download firmware and log output; UART1 is used to send AT commands and receive AT responses. Both UART0 and UART1 use ``115200`` baud rate for communication by default.
+  {IDF_TARGET_CFG_PREFIX}-4MB AT uses two UART ports: UART0 is used to download firmware and log output; UART1 is used to send AT commands and receive AT responses. Both UART0 and UART1 use ``115200`` baud rate for communication by default. Because a 26 MHz XTAL is used, the log is outputted at a baud rate of ``74880`` via UART0 (TX: GPIO20) during the ROM stage. If a 40 MHz XTAL is used instead, the log will be outputted at a baud rate of ``115200``.
 
   .. list-table:: {IDF_TARGET_CFG_PREFIX}-4MB Series Hardware Connection Pinout
     :header-rows: 1
@@ -320,7 +320,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-c2-4mb-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-c2-4mb-hw-connection.png
     :align: center
     :alt: {IDF_TARGET_CFG_PREFIX}-4MB Series Hardware Connection
     :figclass: align-center
@@ -334,7 +334,7 @@ Note:
 
   {IDF_TARGET_CFG_PREFIX}-2MB series refers to the module or board that has a built-in {IDF_TARGET_NAME}/ESP8684 chip with a 2 MB flash.
 
-  {IDF_TARGET_CFG_PREFIX}-2MB AT uses two UART ports: UART0 is used to download firmware and log output; UART1 is used to send AT commands and receive AT responses. Both UART0 (GPIO8, used to output log) and UART1 use ``115200`` baud rate for communication by default. The log is outputted at ``74880`` baud rate at the ROM stage, so if you need to view the ROM log, please open UART0 (TX: GPIO20) at ``74880`` baud rate.
+  {IDF_TARGET_CFG_PREFIX}-2MB AT uses two UART ports: UART0 is used to download firmware and log output; UART1 is used to send AT commands and receive AT responses. Both UART0 (GPIO8, used to output log) and UART1 use ``115200`` baud rate for communication by default. Because a 26 MHz XTAL is used, the log is outputted at a baud rate of ``74880`` via UART0 (TX: GPIO20) during the ROM stage. If a 40 MHz XTAL is used instead, the log will be outputted at a baud rate of ``115200``.
 
   .. list-table:: {IDF_TARGET_CFG_PREFIX}-2MB Series Hardware Connection Pinout
     :header-rows: 1
@@ -353,8 +353,8 @@ Note:
       - UART1
           * GPIO6 (RX)
           * GPIO7 (TX)
-          * GPIO5 (CTS)
-          * GPIO4 (RTS)
+          * GPIO19 (CTS)
+          * GPIO20 (RTS)
       - USB to serial converter
           * TX
           * RX
@@ -370,7 +370,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-c2-2mb-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-c2-2mb-hw-connection.png
     :align: center
     :alt: {IDF_TARGET_CFG_PREFIX}-2MB Series Hardware Connection
     :figclass: align-center
@@ -417,7 +417,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-c3-hw-connection.png
+  .. figure:: ../../_static/get_started/hw_connection/esp32-c3-hw-connection.png
     :align: center
     :alt: {IDF_TARGET_NAME} Series Hardware Connection
     :figclass: align-center
@@ -464,7 +464,7 @@ Note:
 
   **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
 
-  .. figure:: ../../_static/esp32-c6-4mb-hw-connection.jpg
+  .. figure:: ../../_static/get_started/hw_connection/esp32-c6-4mb-hw-connection.jpg
     :align: center
     :alt: {IDF_TARGET_CFG_PREFIX}-4MB Series Hardware Connection
     :figclass: align-center
@@ -472,3 +472,50 @@ Note:
     {IDF_TARGET_CFG_PREFIX}-4MB Series Hardware Connection
 
   If you want to connect your device directly with {IDF_TARGET_CFG_PREFIX}-4MB module rather than the {IDF_TARGET_CFG_PREFIX}-4MB board that integrates it, please refer to the corresponding module `datasheet <https://www.espressif.com/en/support/documents/technical-documents>`_ for more details.
+
+.. only:: esp32s2
+
+  {IDF_TARGET_NAME} Series
+  ------------------------
+
+  {IDF_TARGET_NAME} series refer to the module or board that has a built-in {IDF_TARGET_NAME} chip, such as {IDF_TARGET_CFG_PREFIX}-MINI series device and {IDF_TARGET_CFG_PREFIX}-WROOM series device.
+
+  {IDF_TARGET_NAME} AT uses two UART ports: UART0 is used to download firmware and log output; UART1 is used to send AT commands and receive AT responses. Both UART0 and UART1 use ``115200`` baud rate for communication by default.
+
+  .. list-table:: {IDF_TARGET_NAME} Series Hardware Connection Pinout
+    :header-rows: 1
+
+    * - Function of Connection
+      - {IDF_TARGET_NAME} Board or Module Pins
+      - Other Device Pins
+    * - Download/Log output :sup:`1`
+      - UART0
+          * GPIO44 (RX)
+          * GPIO43 (TX)
+      - PC
+          * TX
+          * RX
+    * - AT command/response :sup:`2`
+      - UART1
+          * GPIO21 (RX)
+          * GPIO17 (TX)
+          * GPIO20 (CTS)
+          * GPIO19 (RTS)
+      - USB to serial converter
+          * TX
+          * RX
+          * RTS
+          * CTS
+
+  **Note** 1: Connection between individual pins of the {IDF_TARGET_NAME} board and the PC is already established internally on the {IDF_TARGET_NAME} board. You only need to provide USB cable between the board and PC.
+
+  **Note** 2: Connection between CTS/RTS is optional, depending on whether you want to use hardware flow control.
+
+  .. figure:: ../../_static/get_started/hw_connection/esp32-s2-hw-connection.jpg
+    :align: center
+    :alt: {IDF_TARGET_NAME} Series Hardware Connection
+    :figclass: align-center
+
+    {IDF_TARGET_NAME} Series Hardware Connection
+
+  If you want to connect your device directly with {IDF_TARGET_NAME} module rather than the {IDF_TARGET_NAME} board that integrates it, please refer to `Datasheet for your module <https://www.espressif.com/zh-hans/support/documents/technical-documents>`_ for more details.

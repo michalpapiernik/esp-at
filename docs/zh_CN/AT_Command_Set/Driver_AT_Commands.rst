@@ -56,7 +56,7 @@
 
 -  **<channel>**：ADC1 通道。
 
-  .. only:: esp32
+  .. only:: esp32 or esp32s2
 
     - {IDF_TARGET_NAME} 设备的取值范围为 [0,7]。
 
@@ -104,7 +104,7 @@
 
 -  **<atten>**：衰减值。
 
-  .. only:: esp32
+  .. only:: esp32 or esp32s2
 
     - 0: 0 dB 衰减，有效测量范围为 [100, 950] mV。
     - 1: 2.5 dB 衰减，有效测量范围为 [100, 1250] mV。
@@ -125,12 +125,12 @@
 
 -  ESP-AT 只支持 ADC1。
 -  {IDF_TARGET_NAME} 支持 12 位宽度。
--  对于如何将通道值转换为电压，可以参考 `ADC 转换 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-reference/peripherals/adc.html#adc-conversion>`__。
+-  对于如何将通道值转换为电压，可以参考 `ADC 转换 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-reference/peripherals/adc_continuous.html#adc-continuous-read-conversion-result>`__。
 
 示例
 ^^^^
 
-.. only:: esp32
+.. only:: esp32 or esp32s2
 
   ::
 
@@ -304,7 +304,7 @@
 说明
 ^^^^
 
--  本指令只支持 I2C 主机。
+-  本命令只支持 I2C 主机。
 
 示例
 ^^^^

@@ -29,7 +29,6 @@ Wi-Fi AT Commands
 -  :ref:`AT+CWSTARTSMART <cmd-STARTS>`: Start SmartConfig.
 -  :ref:`AT+CWSTOPSMART <cmd-STOPS>`: Stop SmartConfig.
 -  :ref:`AT+WPS <cmd-WPS>`: Enable the WPS function.
--  :ref:`AT+MDNS <cmd-MDNS>`: Configure the mDNS function.
 -  :ref:`AT+CWJEAP <cmd-JEAP>`: Connect to a WPA2 Enterprise AP.
 -  :ref:`AT+CWHOSTNAME <cmd-HOSTNAME>`: Query/Set the host name of an {IDF_TARGET_NAME} station.
 -  :ref:`AT+CWCOUNTRY <cmd-COUNTRY>`: Query/Set the Wi-Fi Country Code.
@@ -44,7 +43,6 @@ Introduction
 
   - Enable EAP commands (:ref:`AT+CWJEAP <cmd-JEAP>`): ``Component config`` -> ``AT`` -> ``AT WPA2 Enterprise command support``
   - Disable WPS commands (:ref:`AT+WPS <cmd-WPS>`): ``Component config`` -> ``AT`` -> ``AT WPS command support``
-  - Disable mDNS commands (:ref:`AT+MDNS <cmd-MDNS>`): ``Component config`` -> ``AT`` -> ``AT MDNS command support``
   - Disable smartconfig commands (:ref:`AT+CWSTARTSMART <cmd-STARTS>` and :ref:`AT+CWSTOPSMART <cmd-STOPS>`): ``Component config`` -> ``AT`` -> ``AT smartconfig command support``
   - Disable all Wi-Fi commands (Not recommended. Once disabled, all Wi-Fi and above functions will be unusable, and you will need to implement these AT commands yourself): ``Component config`` -> ``AT`` -> ``AT wifi command support``
 
@@ -177,7 +175,22 @@ Parameters
 Note
 ^^^^^
 
--  The configuration changes will be saved in the NVS area if :ref:`AT+SYSSTORE=1 <cmd-SYSSTORE>`.
+- The configuration changes will be saved in the NVS area if :ref:`AT+SYSSTORE=1 <cmd-SYSSTORE>`.
+
+.. only:: esp32 or esp32c2 or esp32c3 or esp32c6
+
+  - If you have previously used the Bluetooth function, it is recommended to send the following commands to deinitialize the initialized functions before using the SoftAP or SoftAP+Station functions:
+
+    .. only:: esp32
+
+        - :ref:`AT+BTINIT=0 <cmd-BTINIT>` (Deinitialize Classic Bluetooth)
+
+    .. only:: esp32 or esp32c2 or esp32c3 or esp32c6
+
+        - :ref:`AT+BLEINIT=0 <cmd-BINIT>` (Deinitialize Bluetooth LE)
+        - :ref:`AT+BLUFI=0 <cmd-BLUFI>` (Disable BluFi)
+
+    For more details, please refer to the `RF Coexistence <https://docs.espressif.com/projects/esp-idf/en/latest/{IDF_TARGET_PATH_NAME}/api-guides/coexist.html>`_ documentation.
 
 Example
 ^^^^^^^^
@@ -322,7 +335,7 @@ Parameters
 
 -  **<ssid>**: the SSID of the target AP.
 
-   -  Escape character syntax is needed if SSID or password contains special characters, such ``,``, ``"``, or ``\\``.
+   -  Escape character syntax is needed if SSID or password contains special characters, such as ``,``, ``"``, or ``\``.
    -  Chinese SSID is supported. Chinese SSID of some routers or hotspots is not encoded in UTF-8 encoding format. You can scan SSID first, and then connect using the scanned SSID.
 
 -  **<pwd>**: password, MAX: 63-byte ASCII.
@@ -1096,7 +1109,7 @@ Note
 
 -  See `Wi-Fi Protocol Mode <https://docs.espressif.com/projects/esp-idf/en/latest/{IDF_TARGET_PATH_NAME}/api-guides/wifi.html#wi-fi-protocol-mode>`_ for the PHY mode supported by the {IDF_TARGET_NAME} device.
 
-.. only:: esp32 or esp32c3 or esp32c2
+.. only:: esp32 or esp32c3 or esp32c2 or esp32s2
 
   -  By default, PHY mode of {IDF_TARGET_NAME} is 802.11bgn mode.
 
@@ -1162,7 +1175,7 @@ Note
 
 -  See `Wi-Fi Protocol Mode <https://docs.espressif.com/projects/esp-idf/en/latest/{IDF_TARGET_PATH_NAME}/api-guides/wifi.html#wi-fi-protocol-mode>`_ for the PHY mode supported by the {IDF_TARGET_NAME} device.
 
-.. only:: esp32 or esp32c3 or esp32c2
+.. only:: esp32 or esp32c3 or esp32c2 or esp32s2
 
   -  By default, PHY mode of {IDF_TARGET_NAME} is 802.11bgn mode.
 
@@ -1617,48 +1630,6 @@ Example
 
     AT+CWMODE=1
     AT+WPS=1
-
-.. _cmd-MDNS:
-
-:ref:`AT+MDNS <WiFi-AT>`: Configure the mDNS Function
-------------------------------------------------------------
-
-Set Command
-^^^^^^^^^^^
-
-**Command:**
-
-::
-
-    AT+MDNS=<enable>[,<hostname>,<service_name>,<port>]
-
-**Response:**
-
-::
-
-    OK 
-
-Parameters
-^^^^^^^^^^
-
--  **<enable>**:
-
-   -  1: Enable the mDNS function. The following three parameters need to be set.
-   -  0: Disable the mDNS function. The following three parameters does not need to be set.
-
--  **<hostname>**: mDNS host name.
--  **<service_name>**: mDNS service name.
--  **<port>**: mDNS port.
-
-Example
-^^^^^^^^
-
-::
-
-    AT+CWMODE=1
-    AT+CWJAP="1234567890","1234567890"
-    AT+MDNS=1,"espressif","_iot",8080  
-    AT+MDNS=0
 
 .. _cmd-JEAP:
 

@@ -29,7 +29,6 @@ Wi-Fi AT 命令集
 -  :ref:`AT+CWSTARTSMART <cmd-STARTS>`：开启 SmartConfig
 -  :ref:`AT+CWSTOPSMART <cmd-STOPS>`：停止 SmartConfig
 -  :ref:`AT+WPS <cmd-WPS>`：设置 WPS 功能
--  :ref:`AT+MDNS <cmd-MDNS>`：设置 mDNS 功能
 -  :ref:`AT+CWJEAP <cmd-JEAP>`：连接 WPA2 企业版 AP
 -  :ref:`AT+CWHOSTNAME <cmd-HOSTNAME>`：查询/设置 {IDF_TARGET_NAME} Station 的主机名称
 -  :ref:`AT+CWCOUNTRY <cmd-COUNTRY>`：查询/设置 Wi-Fi 国家代码
@@ -44,7 +43,6 @@ Wi-Fi AT 命令集
 
   - 启用 EAP 命令（:ref:`AT+CWJEAP <cmd-JEAP>`）： ``Component config`` -> ``AT`` -> ``AT WPA2 Enterprise command support``
   - 禁用 WPS 命令（:ref:`AT+WPS <cmd-WPS>`）：``Component config`` -> ``AT`` -> ``AT WPS command support``
-  - 禁用 mDNS 命令（:ref:`AT+MDNS <cmd-MDNS>`）：``Component config`` -> ``AT`` -> ``AT MDNS command support``
   - 禁用 smartconfig 命令（:ref:`AT+CWSTARTSMART <cmd-STARTS>`、:ref:`AT+CWSTOPSMART <cmd-STOPS>`）：``Component config`` -> ``AT`` -> ``AT smartconfig command support``
   - 禁用所有 Wi-Fi 命令（不推荐。一旦禁用，所有 Wi-Fi 以及以上的功能将无法使用，您需要自行实现这些 AT 命令）： ``Component config`` -> ``AT`` -> ``AT wifi command support``
 
@@ -177,7 +175,22 @@ Wi-Fi AT 命令集
 说明
 ^^^^
 
--  若 :ref:`AT+SYSSTORE=1 <cmd-SYSSTORE>`，本设置将保存在 NVS 分区
+- 若 :ref:`AT+SYSSTORE=1 <cmd-SYSSTORE>`，本设置将保存在 NVS 分区
+
+.. only:: esp32 or esp32c2 or esp32c3 or esp32c6
+
+  - 如您之前使用过蓝牙功能，为获得更好的性能，建议在使用 SoftAP 或 SoftAP+Station 功能前，先发送以下命令注销已初始化过的功能：
+
+    .. only:: esp32
+
+        - :ref:`AT+BTINIT=0 <cmd-BTINIT>` （注销 Classic Bluetooth）
+
+    .. only:: esp32 or esp32c2 or esp32c3 or esp32c6
+
+        - :ref:`AT+BLEINIT=0 <cmd-BINIT>` （注销 Bluetooth LE）
+        - :ref:`AT+BLUFI=0 <cmd-BLUFI>` （关闭 BluFi）
+
+    如您想了解更多细节，请阅读 `RF 共存 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-guides/coexist.html>`_ 文档。
 
 示例
 ^^^^
@@ -322,7 +335,7 @@ Wi-Fi AT 命令集
 
 -  **<ssid>**：目标 AP 的 SSID
 
-   -  如果 SSID 和密码中有 ``,``、``"``、``\\`` 等特殊字符，需转义
+   -  如果 SSID 和密码中有 ``,``、``"``、``\`` 等特殊字符，需转义
    -  AT 支持连接 SSID 为中文的 AP，但是某些路由器或者热点的中文 SSID 不是 UTF-8 编码格式。您可以先扫描 SSID，然后使用扫描到的 SSID 进行连接。
 
 -  **<pwd>**：密码最长 63 字节 ASCII
@@ -732,7 +745,7 @@ Wi-Fi AT 命令集
 说明
 ^^^^
 
--  本指令只有当 :ref:`AT+CWMODE=2 <cmd-MODE>` 或者 :ref:`AT+CWMODE=3 <cmd-MODE>` 时才有效
+-  本命令只有当 :ref:`AT+CWMODE=2 <cmd-MODE>` 或者 :ref:`AT+CWMODE=3 <cmd-MODE>` 时才有效
 -  若 :ref:`AT+SYSSTORE=1 <cmd-SYSSTORE>`，配置更改将保存在 NVS 分区
 -  默认 SSID 因设备而异，因为它由设备的 MAC 地址组成。 您可以使用 :ref:`AT+CWSAP? <cmd-SAP>` 查询默认的SSID。
 
@@ -774,7 +787,7 @@ Wi-Fi AT 命令集
 说明
 ^^^^
 
--  本指令无法查询静态 IP，仅支持在 {IDF_TARGET_NAME} SoftAP 和连入的 station DHCP 均使能的情况下有效
+-  本命令无法查询静态 IP，仅支持在 {IDF_TARGET_NAME} SoftAP 和连入的 station DHCP 均使能的情况下有效
 
 .. _cmd-QIF:
 
@@ -1096,7 +1109,7 @@ Wi-Fi AT 命令集
 
 -  当前，{IDF_TARGET_NAME} 设备支持的 PHY mode 见：`Wi-Fi 协议模式 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-guides/wifi.html#id40>`_
 
-.. only:: esp32 or esp32c3 or esp32c2
+.. only:: esp32 or esp32c3 or esp32c2 or esp32s2
 
   - 默认情况下，{IDF_TARGET_NAME} 设备的 PHY mode 是 802.11bgn 模式
 
@@ -1162,7 +1175,7 @@ Wi-Fi AT 命令集
 
 -  当前，{IDF_TARGET_NAME} 设备支持的 PHY mode 见：`Wi-Fi 协议模式 <https://docs.espressif.com/projects/esp-idf/zh_CN/latest/{IDF_TARGET_PATH_NAME}/api-guides/wifi.html#id40>`_
 
-.. only:: esp32 or esp32c3 or esp32c2
+.. only:: esp32 or esp32c3 or esp32c2 or esp32s2
 
   - 默认情况下，{IDF_TARGET_NAME} 设备的 PHY mode 是 802.11bgn 模式
 
@@ -1617,48 +1630,6 @@ Wi-Fi AT 命令集
 
     AT+CWMODE=1
     AT+WPS=1
-
-.. _cmd-MDNS:
-
-:ref:`AT+MDNS <WiFi-AT>`：设置 mDNS 功能
-------------------------------------------------------------
-
-设置命令
-^^^^^^^^
-
-**命令：**
-
-::
-
-    AT+MDNS=<enable>[,<hostname>,<service_name>,<port>]
-
-**响应：**
-
-::
-
-    OK 
-
-参数
-^^^^
-
--  **<enable>**：
-
-   -  1: 开启 mDNS 功能，后续参数需要填写
-   -  0: 关闭 mDNS 功能，后续参数无需填写
-
--  **<hostname>**：mDNS 主机名称
--  **<service_name>**：mDNS 服务名称
--  **<port>**：mDNS 端口
-
-示例
-^^^^
-
-::
-
-    AT+CWMODE=1
-    AT+CWJAP="1234567890","1234567890"
-    AT+MDNS=1,"espressif","_iot",8080  
-    AT+MDNS=0
 
 .. _cmd-JEAP:
 

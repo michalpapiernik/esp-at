@@ -2,7 +2,7 @@
 AT Command Set
 **************
 
-{IDF_TARGET_VER: default="undefined", esp32="5.0", esp32c2="5.0", esp32c3="5.0", esp32c6="5.1"}
+{IDF_TARGET_VER: default="undefined", esp32="5.0", esp32c2="5.0", esp32c3="5.0", esp32c6="5.1", esp32s2="5.0"}
 
 :link_to_translation:`zh_CN:[中文]`
 
@@ -14,7 +14,7 @@ Here is a list of AT commands.
    Basic AT Commands <Basic_AT_Commands>
    Wi-Fi AT Commands <Wi-Fi_AT_Commands>
    TCP-IP AT Commands <TCP-IP_AT_Commands>
-   Bluetooth® Low Energy AT Commands <BLE_AT_Commands>
+   :esp32 or esp32c2 or esp32c3 or esp32c6: Bluetooth® Low Energy AT Commands <BLE_AT_Commands>
    :esp32: Bluetooth® AT Commands <BT_AT_Commands>
    MQTT AT Commands <MQTT_AT_Commands>
    HTTP AT Commands <HTTP_AT_Commands>
@@ -78,7 +78,7 @@ Generic AT command has four types:
 
       AT+CWSAP="ESP756290","21030826",1,4
 
--  Escape character syntax is needed if a string contains special characters, such as ``,``, ``"``, or ``\``:
+-  Escape character syntax is needed if a string contains special characters. The characters that need to be escaped are ``,``, ``"``, and ``\``:
 
    -  ``\\``: escape the backslash itself
    -  ``\,``: escape comma which is not used to separate each parameter

@@ -43,6 +43,7 @@ TCP/IP AT 命令
 -  :ref:`AT+CIPRECVLEN <cmd-CIPRECVLEN>`：查询被动接收模式下套接字数据的长度
 -  :ref:`AT+PING <cmd-CIPPING>`：ping 对端主机
 -  :ref:`AT+CIPDNS <cmd-DNS>`：查询/设置 DNS 服务器信息
+-  :ref:`AT+MDNS <cmd-MDNS>`：设置 mDNS 功能
 -  :ref:`AT+CIPTCPOPT <cmd-TCPOPT>`：查询/设置套接字选项
 
 .. _cmd-tcpip-intro:
@@ -55,6 +56,7 @@ TCP/IP AT 命令
 
   - 禁用 OTA 命令（:ref:`AT+CIUPDATE <cmd-UPDATE>`、:ref:`AT+CIPFWVER <cmd-FWVER>`）：``Component config`` -> ``AT`` -> ``AT OTA command support``
   - 禁用 PING 命令（:ref:`AT+PING <cmd-CIPPING>`）：``Component config`` -> ``AT`` -> ``AT ping command support``
+  - 禁用 mDNS 命令（:ref:`AT+MDNS <cmd-MDNS>`）：``Component config`` -> ``AT`` -> ``AT MDNS command support``
   - 禁用 TCP/IP 命令（不推荐。一旦禁用，所有 TCP/IP 功能将无法使用，您需要自行实现这些 AT 命令）： ``Component config`` -> ``AT`` -> ``AT net command support``
 
 .. _cmd-IPV6:
@@ -1390,7 +1392,7 @@ TCP/IP AT 命令
 -  有关 asctime 时间的定义请见 `asctime man page <https://linux.die.net/man/3/asctime>`_。
 -  在 {IDF_TARGET_NAME} 进入 Light-sleep 或 Deep-sleep 后再唤醒，系统时间可能会不准。建议您重新发送 :ref:`AT+CIPSNTPCFG <cmd-SNTPCFG>` 命令，从 NTP 服务器获取新的时间。
 
-.. only:: esp32 or esp32c3 or esp32c6
+.. only:: esp32 or esp32c3 or esp32c6 or esp32s2
 
   - SNTP 获取到的时间存储在 RTC 区域，因此在软重启（芯片不掉电）后，时间不会丢失。
 
@@ -2218,6 +2220,13 @@ ESP-AT 在运行时，通过 Wi-Fi 从指定的服务器上下载新固件到某
 -  **[<remote IP>]**：字符串参数，表示对端 IP 地址，通过 :ref:`AT+CIPDINFO=1 <cmd-IPDINFO>` 命令使能。
 -  **[<remote port>]**：对端端口，通过 :ref:`AT+CIPDINFO=1 <cmd-IPDINFO>` 命令使能。
 
+说明
+^^^^
+
+- 该命令需要在被动接收模式下执行，否则会直接返回 ERROR，可以通过 :ref:`AT+CIPRECVTYPE? <cmd-CIPRECVTYPE>` 命令确认是否是在被动接收模式。
+- 该命令在没有数据可读的情况下执行时会直接返回 ERROR，可以通过 :ref:`AT+CIPRECVLEN? <cmd-CIPRECVLEN>` 命令确认此时是否有可读数据。
+- 执行 ``AT+CIPRECVDATA=<len>`` 命令时，至少需要 ``<len> + 128`` 字节的内存，您可以使用命令 :ref:`AT+SYSRAM? <Basic-AT>` 查询当前可用内存情况。当内存不足导致内存申请失败时此命令也会返回 ERROR。你可以通过 :doc:`AT 输出日志口 </Get_Started/Hardware_connection>` 查看是否有类似 ``alloc fail`` 的打印信息，以确认是否出现了内存分配失败的情况。
+
 示例
 ^^^^
 
@@ -2418,6 +2427,57 @@ ping 对端主机
     // 第二个基于 IPv6 的 DNS 服务器：google-public-dns-a.google.com
     // 第三个基于 IPv6 的 DNS 服务器：江苏省主 DNS 服务器
     AT+CIPDNS=1,"240c::6666","2001:4860:4860::8888","240e:5a::6666"
+
+.. _cmd-MDNS:
+
+:ref:`AT+MDNS <WiFi-AT>`：设置 mDNS 功能
+------------------------------------------------------------
+
+设置命令
+^^^^^^^^
+
+**命令：**
+
+::
+
+    AT+MDNS=<enable>[,<"hostname">,<"service_type">,<port>][,<"instance">][,<"proto">][,<txt_number>][,<"key">,<"value">][...]
+
+**响应：**
+
+::
+
+    OK
+
+参数
+^^^^
+
+- **<enable>**：
+
+   - 1：开启 mDNS 功能，后续参数需要填写
+   - 0：关闭 mDNS 功能，后续参数无需填写
+
+- **<"hostname">**：mDNS 主机名称。
+- **<"service_type">**：mDNS 服务类型。
+- **<port>**：mDNS 服务端口。
+- **<"instance">**：mDNS 实例名称。默认值：``<"hostname">``。
+- **<"proto">**：mDNS 服务协议。建议值：``_tcp`` 或 ``_udp``，默认值：``_tcp``。
+- **<txt_number>**：mDNS TXT 记录的数量。范围：[1,10]。
+- **<"key">**：TXT 记录的键。
+- **<"value">**：TXT 记录的值。
+- **[...]**：根据 ``<txt_number>`` 继续填写 TXT 记录的键值对。
+
+示例
+^^^^
+
+::
+
+    // 开启 mDNS 功能，主机名为 "espressif"，服务类型为 "_iot"，端口为 8080
+    AT+MDNS=1,"espressif","_iot",8080
+
+    // 关闭 mDNS 功能
+    AT+MDNS=0
+
+详细示例参考： :ref:`mDNS 示例 <example-mdns>`。
 
 .. _cmd-TCPOPT:
 

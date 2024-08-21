@@ -111,13 +111,6 @@ Do AT commands support ESP-WIFI-MESH?
 
   Currently, AT commands do not support ESP-WIFI-MESH.
 
-Does AT support websocket commands?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  - Not supported in the default firmware.
-  - It can be implemented by custom commands. See `websocket <https://github.com/espressif/esp-idf/tree/master/examples/protocols/websocket>`_ and :doc:`Compile_and_Develop/How_to_add_user-defined_AT_commands` for more information.
-
-
 .. Are there any examples of using AT commands to connect to aliyun or Tencent Cloud?
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ..
@@ -297,3 +290,11 @@ How to enable debug log for AT?
     - Enable Wi-Fi debug: ``./build.py menuconfig`` > ``Component config`` > ``Wi-Fi`` > ``Wi-Fi debug log level`` set to ``Debug``.
     - Enable TCP/IP debug: ``./build.py menuconfig`` > ``Component config`` > ``LWIP`` > ``Enable LWIP Debug`` > Set the log level of the specific part you want to debug to ``Debug``.
     - Enable Bluetooth LE debug: ``./build.py menuconfig`` > ``Component config`` > ``Bluetooth`` > ``Bluedroid Options`` > ``Disable BT debug logs`` > ``BT DEBUG LOG LEVEL`` > Set the log level of the specific part you want to debug to ``Debug``.
+
+How does the AT command implement the functionality of resuming HTTP transfers after interrupts?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  - Currently, AT commands provide two methods:
+
+    - Specify the data range to be read using the HTTP Range field. For specific details, please refer to the example of :ref:`AT+HTTPCHEAD <cmd-HTTPCHEAD_example>`.
+    - You can construct an HTTP GET request using AT TCP series commands. Between steps 6 and 7 of the example :ref:`{IDF_TARGET_NAME} obtains socket data in passive receiving mode <example-passive_recv>`, add a step: Use the :ref:`AT+CIPSEND <cmd-SEND>` command to send your own HTTP GET request header to the server. In passive receive mode, for HTTP GET request data received from the server, the MCU needs to actively send the :ref:`AT+CIPRECVDATA <cmd-CIPRECVDATA>` command to read the data. This helps avoid situations where the MCU may be unable to process data promptly due to large amounts of data being transferred from the server.

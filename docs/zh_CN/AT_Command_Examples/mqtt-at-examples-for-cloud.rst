@@ -3,7 +3,7 @@ MQTT AT 连接云示例
 
 :link_to_translation:`en:[English]`
 
-本文档主要介绍您的设备如何通过 AT 指令对接 AWS IoT。
+本文档主要介绍您的设备如何通过 AT 命令对接 AWS IoT。
 
 .. Important::
     有关如何使用 MQTT AT 命令的详细信息，请参阅 :doc:`../AT_Command_Set/MQTT_AT_Commands`。
@@ -33,7 +33,7 @@ MQTT AT 连接云示例
     端点的格式为 “xxx-ats.iot.us-east-2.amazonaws.com”。
 
 .. note::
-  强烈建议您熟悉 `AWS IoT 开发人员指南 <https://docs.aws.amazon.com/zh_cn/iot/latest/developerguide/connect-to-iot.html>`_ 以下是本指南中值得注意的一些要点。
+  强烈建议您熟悉 `AWS IoT 开发人员指南 <https://docs.aws.amazon.com/zh_cn/iot/latest/developerguide/what-is-aws-iot.html>`_ 以下是本指南中值得注意的一些要点。
 
   - AWS IoT 需要所有设备必须有事物证书、事物私钥、和根证书。
   - 有关如何激活证书。
